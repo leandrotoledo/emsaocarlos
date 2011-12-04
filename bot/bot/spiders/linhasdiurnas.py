@@ -16,6 +16,7 @@ class AthenasLinhas(CrawlSpider):
 
 	USER_AGENT = "Googlebot/2.1 ( http://www.google.com/bot.html )"
 
+
 	def parse(self, response):
 		hxs = HtmlXPathSelector(response)
 		trs = hxs.select('.//table[2]/tr[position()>=2 and not(position()>=52)]')
