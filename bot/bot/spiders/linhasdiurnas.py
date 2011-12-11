@@ -27,9 +27,9 @@ class AthenasLinhas(CrawlSpider):
 			loader.add_xpath('nome', './td[3]/p//text()')
 
 			link = self.base_url + qxs.select('./td[3]//a/@href').extract()[0]
-			#TODO: Deveria manter o contexto e retornar os dados da proxima pagina
-			#      mas o que parece eh que nao esta retornando
-			request = Request(link, callback=self.parse_item)
+			#TODO: Apesar de manter o contexto em meta com a instancia de XPathItemLoader, 
+			# os valores nao sao persistidos no dict
+			request = Request(link, callback=self.parse_item, meta={'loader': loader})
 			pdb.set_trace()
 
 			#loader.add_value('ida', request.meta['ida'])
@@ -41,9 +41,11 @@ class AthenasLinhas(CrawlSpider):
 	def parse_item(self, response):
 		hxs = HtmlXPathSelector(response)
 
-		linha = {}
+		loader = response.meta['loader']
+		
+		#loader.add_xpath('ida', './/div[3]/table/tr//text()')
+		loader.add_value('ida', 'TESTE IDA')
+		#loader.add_xpath('volta', './/div[5]/table/tr//text()')
+		loader.add_value('volta', 'TESTE VOLTA')
 
-		linha['ida']   = hxs.select('.//div[3]/table/tr//text()').extract()
-		linha['volta'] = hxs.select('.//div[5]/table/tr//text()').extract()
-
-		return linha
+		return loader
